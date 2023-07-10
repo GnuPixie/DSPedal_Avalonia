@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DSPedal_Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="https://github.com/avaloniaui"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DSPedal_Avalonia.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="DSPedal_Avalonia">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <WrapPanel x:Name="PedalboardPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="1">
+            <Button Content="+" Click="AddButton_Click" />
+        </WrapPanel>
+        <Grid Grid.Row="2">
+            <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
+                <ListBox x:Name="PedalsList" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="ToggleButton">
+                            <ToggleButton  Content="{Binding Name}" Click="PedalButton_Click" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+            <StackPanel Grid.Row="2" VerticalAlignment="Bottom">
+                <!-- Insert Pedalbox options here -->
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

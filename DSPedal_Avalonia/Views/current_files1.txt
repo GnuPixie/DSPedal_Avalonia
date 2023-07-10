@@ -1,0 +1,150 @@
+MainWindow.axaml
+```
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DSPedal_Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DSPedal_Avalonia.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="DSPedal_Avalonia">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainWindowViewModel />
+	</Design.DataContext>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<WrapPanel x:Name="PedalboardPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="1">
+			<!--
+			<Button Height="44" Width="300" />
+			<Button Height="44" Width="300" />
+			<Button Width="300" Height="44">
+				<Image Stretch="Fill" Source="/Assets/Image1.png" />
+			</Button>
+			-->
+			<Button Content="+" />
+		</WrapPanel>
+		<Grid Grid.Row="2">
+			<StackPanel Grid.Row="1" VerticalAlignment="Bottom">
+				<ListBox x:Name="PedalsList" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+			</StackPanel>
+			<StackPanel Grid.Row="2" VerticalAlignment="Bottom">
+				<!-- Insert Pedalbox options here -->
+			</StackPanel>
+		</Grid>
+	</Grid>
+</Window>
+```
+
+MainWindow.axaml.cs
+```
+using Avalonia.Controls;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace DSPedal_Avalonia.Views
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            LoadPedals();
+        }
+
+        private void LoadPedals()
+        {
+            var jsonString = @"{
+              ""distortion"": {
+                ""gain"": {
+                  ""value"": 5.0,
+                  ""display"": ""slider"",
+                  ""min"": 0.0,
+                  ""max"": 10.0
+                },
+                ""volume"": {
+                  ""value"": 5.0,
+                  ""display"": ""slider"",
+                  ""min"": 0.0,
+                  ""max"": 10.0
+                }
+              },
+              ""freeverb"": {
+                ""roomsize"": {
+                  ""value"": 0.5,
+                  ""display"": ""slider"",
+                  ""min"": 0.0,
+                  ""max"": 1.0
+                },
+                ""damp"": {
+                  ""value"": 0.5,
+                  ""display"": ""slider"",
+                  ""min"": 0.0,
+                  ""max"": 1.0
+                },
+                ""wet"": {
+                  ""value"": 0.5,
+                  ""display"": ""slider"",
+                  ""min"": 0.0,
+                  ""max"": 1.0
+                }
+              },
+              ""chorus"": {
+                ""delay"": {
+                  ""value"": 20.0,
+                  ""display"": ""slider"",
+                  ""min"": 0.0,
+                  ""max"": 50.0
+                },
+                ""depth"": {
+                  ""value"": 3.0,
+                  ""display"": ""slider"",
+                  ""min"": 0.0,
+                  ""max"": 10.0
+                },
+                ""feedback"": {
+                  ""value"": 0.5,
+                  ""display"": ""slider"",
+                  ""min"": -1.0,
+                  ""max"": 1.0
+                }
+              },
+              ""flanger"": {
+                ""delayTime"": {
+                  ""value"": 1.0,
+                  ""display"": ""slider"",
+                  ""min"": 0.0,
+                  ""max"": 10.0
+                },
+                ""lfoDepth"": {
+                  ""value"": 1.0,
+                  ""display"": ""slider"",
+                  ""min"": -1.0,
+                  ""max"": 1.0
+                },
+                ""feedbackGain"": {
+                  ""value"": 0.7,
+                  ""display"": ""slider"",
+                  ""min"": -1.0,
+                  ""max"": 1.0
+                }
+              }
+            }";
+            var effects = JsonConvert.DeserializeObject<JObject>(jsonString);
+            foreach (var effect in effects)
+            {
+                PedalsList.Items.Add(new Button { Content = effect.Key });
+            }
+        }
+    }
+}
+```
+
